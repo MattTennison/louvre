@@ -1,0 +1,11 @@
+name = "louvre"
+type = "javascript"
+zone_id = ""
+account_id = "3bc1ba05af520b1b02c6222025200b06"
+route = ""
+workers_dev = true
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"
