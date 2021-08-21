@@ -39,6 +39,7 @@ export const search = async (searchTerm: string) => {
 
   const url = new URL('https://api.pexels.com/v1/search')
   url.searchParams.set('query', searchTerm)
+  url.searchParams.set('per_page', '80')
   const response = await fetch(url.toString(), {
     headers: {
       Authorization: apiKey,

@@ -9,3 +9,11 @@ workers_dev = true
 command = "npm install && npm run build"
 [build.upload]
 format = "service-worker"
+
+[[kv_namespaces]]
+binding = "PHOTOS"
+id = "90233aa3ce5a40de88573a97cb11faa2"
+preview_id = "a6621ecc7c774e76b576d9f252338531"
+
+[triggers]
+crons = ["*/30 * * * *"]

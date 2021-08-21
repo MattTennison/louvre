@@ -1,5 +1,5 @@
 export default {
   pexels: {
-    authentication: 'foo',
+    authentication: PEXELS_API_KEY,
   },
 }
