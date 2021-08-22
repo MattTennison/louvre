@@ -34,8 +34,22 @@ test('with initalised store', async () => {
   expect(response.headers.get('Access-Control-Allow-Origin')).toEqual('*')
   expect(body).toMatchInlineSnapshot(`
 Object {
-  "avg_color": "#BFC0C5",
-  "url": "https://images.pexels.com/photos/1699655/pexels-photo-1699655.jpeg",
+  "data": Object {
+    "photo": Object {
+      "attribution": Object {
+        "link": Object {
+          "source": "Pexels",
+          "url": "https://www.pexels.com/photo/white-wooden-cabinet-1699655/",
+        },
+        "photographer": Object {
+          "name": "Henry & Co.",
+          "url": "https://www.pexels.com/@hngstrm",
+        },
+      },
+      "avg_color": "#BFC0C5",
+      "src": "https://images.pexels.com/photos/1699655/pexels-photo-1699655.jpeg",
+    },
+  },
 }
 `)
 })

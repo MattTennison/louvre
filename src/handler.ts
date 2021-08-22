@@ -1,6 +1,7 @@
 import { pickRandom } from './utils/pick-random'
 import cronParser from 'cron-parser'
 import config from './config'
+import { PexelsPhotoPayload } from './services/photo'
 
 const createResponse = (body: Object, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
@@ -40,12 +41,27 @@ export async function handleRequest(request: Request): Promise<Response> {
       )
     }
 
+    const photo = PexelsPhotoPayload.parse(JSON.parse(result))
     const {
       src: { original },
       avg_color,
-    } = JSON.parse(result)
+      photographer,
+      photographer_url,
+      url,
+    } = photo
 
-    return createResponse({ url: original, avg_color })
+    return createResponse({
+      data: {
+        photo: {
+          src: original,
+          avg_color,
+          attribution: {
+            photographer: { name: photographer, url: photographer_url },
+            link: { source: 'Pexels', url },
+          },
+        },
+      },
+    })
   } catch (e) {
     return createResponse(
       { error: e.message },
