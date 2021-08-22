@@ -3,6 +3,7 @@ import { pickRandom } from './utils/pick-random'
 const createResponse = (body: Object, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
   response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Content-Type', 'application/json')
   return response
 }
 

@@ -4,5 +4,6 @@
   },
   "testRegex": "/test/.*\\.test\\.ts$",
   "collectCoverageFrom": ["src/**/*.{ts,js}"],
-  "setupFilesAfterEnv": ["jest-extended"]
+  "setupFilesAfterEnv": ["jest-extended"],
+  "setupFiles": ["./jest.setup.ts"]
 }
