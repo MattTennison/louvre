@@ -39,6 +39,7 @@
     "webpack-cli": "^4.7.0"
   },
   "dependencies": {
+    "cron-parser": "^3.5.0",
     "zod": "^3.7.3"
   }
 }

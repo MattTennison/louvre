@@ -1,4 +1,6 @@
 import { pickRandom } from './utils/pick-random'
+import cronParser from 'cron-parser'
+import config from './config'
 
 const createResponse = (body: Object, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
@@ -10,6 +12,22 @@ const createResponse = (body: Object, init?: ResponseInit) => {
 export async function handleRequest(request: Request): Promise<Response> {
   try {
     const { keys } = await PHOTOS.list({ prefix: 'minimalism:photo' })
+    if (keys.length === 0) {
+      const response = createResponse(
+        { error: 'no.photos.in.cache' },
+        {
+          status: 503,
+        },
+      )
+
+      response.headers.set(
+        'Retry-After',
+        cronParser.parseExpression(config.schedule.cron).next().toISOString(),
+      )
+
+      return response
+    }
+
     const { name } = pickRandom(keys)
     const result = await PHOTOS.get(name)
 

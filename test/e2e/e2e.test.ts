@@ -1,14 +1,17 @@
 import pexelsSearchPhotosResponse from '../fixtures/pexels/search-photos.json'
-import { stubKeyValueStore } from '../stub-key-value-store'
+import { KeyValueStore, stubKeyValueStore } from '../stub-key-value-store'
 import { handleScheduled } from '../../src/load-data'
 import { handleRequest } from '../../src/handler'
 
 declare var global: any
-
-jest.spyOn(Math, 'random').mockReturnValue(0.64)
+let photosStore: KeyValueStore
 
 beforeEach(() => {
-  const photosStore = stubKeyValueStore()
+  photosStore = stubKeyValueStore()
+  jest.spyOn(Math, 'random').mockReturnValue(0.64)
+
+  const today = '2021-08-22T09:14:47.409Z'
+  jest.spyOn(Date, 'now').mockReturnValue(new Date(today).getTime())
 
   Object.assign(global, {
     PHOTOS: photosStore,
@@ -33,6 +36,38 @@ test('with initalised store', async () => {
 Object {
   "avg_color": "#BFC0C5",
   "url": "https://images.pexels.com/photos/1699655/pexels-photo-1699655.jpeg",
+}
+`)
+})
+
+test('when KeyValue is throwing errors', async () => {
+  await handleScheduled()
+  jest
+    .spyOn(photosStore, 'get')
+    .mockRejectedValue(new Error('something.not.right'))
+
+  const response = await handleRequest(new Request('/', { method: 'GET' }))
+  const body = await response.json()
+
+  expect(response.status).toEqual(500)
+  expect(body).toMatchInlineSnapshot(`
+Object {
+  "error": "something.not.right",
+}
+`)
+})
+
+test('when no entries are in the KeyValue store', async () => {
+  const response = await handleRequest(new Request('/', { method: 'GET' }))
+  const body = await response.json()
+
+  expect(response.status).toEqual(503)
+  expect(response.headers.get('Retry-After')).toEqual(
+    '2021-08-22T23:30:00.000Z',
+  )
+  expect(body).toMatchInlineSnapshot(`
+Object {
+  "error": "no.photos.in.cache",
 }
 `)
 })
