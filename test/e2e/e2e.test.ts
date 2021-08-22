@@ -2,6 +2,7 @@ import pexelsSearchPhotosResponse from '../fixtures/pexels/search-photos.json'
 import { KeyValueStore, stubKeyValueStore } from '../stub-key-value-store'
 import { handleScheduled } from '../../src/load-data'
 import { handleRequest } from '../../src/handler'
+import MockDate from 'mockdate'
 
 declare var global: any
 let photosStore: KeyValueStore
@@ -10,8 +11,7 @@ beforeEach(() => {
   photosStore = stubKeyValueStore()
   jest.spyOn(Math, 'random').mockReturnValue(0.64)
 
-  const today = '2021-08-22T09:14:47.409Z'
-  jest.spyOn(Date, 'now').mockReturnValue(new Date(today).getTime())
+  MockDate.set('2021-08-21T09:14:47.409Z')
 
   Object.assign(global, {
     PHOTOS: photosStore,
@@ -21,6 +21,10 @@ beforeEach(() => {
       }),
   })
   jest.resetModules()
+})
+
+afterEach(() => {
+  MockDate.reset()
 })
 
 test('with initalised store', async () => {
@@ -77,7 +81,7 @@ test('when no entries are in the KeyValue store', async () => {
 
   expect(response.status).toEqual(503)
   expect(response.headers.get('Retry-After')).toEqual(
-    '2021-08-22T23:30:00.000Z',
+    '2021-08-21T23:30:00.000Z',
   )
   expect(body).toMatchInlineSnapshot(`
 Object {
