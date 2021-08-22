@@ -23,7 +23,10 @@ export async function handleRequest(request: Request): Promise<Response> {
 
       response.headers.set(
         'Retry-After',
-        cronParser.parseExpression(config.schedule.cron).next().toISOString(),
+        cronParser
+          .parseExpression(config.schedule.cron, { tz: 'Europe/London' })
+          .next()
+          .toISOString(),
       )
 
       return response
