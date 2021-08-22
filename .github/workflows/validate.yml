@@ -1,5 +1,8 @@
-name: build
-on: [push]
+name: validate
+on:
+  push:
+    branches-ignore:
+      - "main"
 jobs:
   quality-checks:
     runs-on: ubuntu-20.04

@@ -1,0 +1,28 @@
+name: validate
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  quality-checks:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - run: npm ci
+      - run: npm test
+
+  release:
+    runs-on: ubuntu-20.04
+    needs: quality-checks
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - run: npm i @cloudflare/wrangler -g
+      - run: wrangler publish
