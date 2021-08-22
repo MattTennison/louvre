@@ -81,7 +81,7 @@ test('when no entries are in the KeyValue store', async () => {
 
   expect(response.status).toEqual(503)
   expect(response.headers.get('Retry-After')).toEqual(
-    '2021-08-21T23:30:00.000Z',
+    '2021-08-22T00:30:00.000Z',
   )
   expect(body).toMatchInlineSnapshot(`
 Object {
