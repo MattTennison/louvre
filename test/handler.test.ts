@@ -5,13 +5,23 @@ import 'jest-extended'
 
 declare var global: any
 
-describe('handle', () => {
+describe('handleRequest', () => {
   beforeEach(() => {
     Object.assign(global, makeServiceWorkerEnv(), {
-      fetch: () =>
-        Promise.resolve({
-          json: () => Promise.resolve(pexelsSearchPhotosResponse),
-        }),
+      PHOTOS: {
+        list: () =>
+          Promise.resolve({
+            keys: pexelsSearchPhotosResponse.photos.map((_, index) => ({
+              name: `minimalism:photo:${index}`,
+            })),
+          }),
+        get: (key: string) => {
+          const index = Number.parseInt(key.replace('minimalism:photo:', ''))
+          return Promise.resolve(
+            JSON.stringify(pexelsSearchPhotosResponse.photos[index]),
+          )
+        },
+      },
     })
     jest.resetModules()
   })
