@@ -2,26 +2,19 @@ import { handleRequest } from '../src/handler'
 import makeServiceWorkerEnv from 'service-worker-mock'
 import pexelsSearchPhotosResponse from './fixtures/pexels/search-photos.json'
 import 'jest-extended'
+import { stubKeyValueStore } from './stub-key-value-store'
 
 declare var global: any
 
 describe('handleRequest', () => {
   beforeEach(() => {
+    const photosStore = stubKeyValueStore()
+    pexelsSearchPhotosResponse.photos.forEach((photo, index) =>
+      photosStore.put(`minimalism:photo:${index}`, JSON.stringify(photo)),
+    )
+
     Object.assign(global, makeServiceWorkerEnv(), {
-      PHOTOS: {
-        list: () =>
-          Promise.resolve({
-            keys: pexelsSearchPhotosResponse.photos.map((_, index) => ({
-              name: `minimalism:photo:${index}`,
-            })),
-          }),
-        get: (key: string) => {
-          const index = Number.parseInt(key.replace('minimalism:photo:', ''))
-          return Promise.resolve(
-            JSON.stringify(pexelsSearchPhotosResponse.photos[index]),
-          )
-        },
-      },
+      PHOTOS: photosStore,
     })
     jest.resetModules()
   })

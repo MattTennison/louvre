@@ -1,4 +1,3 @@
-import { search } from './services/photo'
 import { pickRandom } from './utils/pick-random'
 
 const createResponse = (body: Object, init?: ResponseInit) => {
