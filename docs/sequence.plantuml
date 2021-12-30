@@ -1,0 +1,16 @@
+@startuml
+==API consumption==
+Consumer -> Louvre: GET /
+Louvre -> "Cloudflare KV": Request all items under minimalism:photo
+Louvre <- "Cloudflare KV": Return all items
+Louvre -> Louvre: Pick random photo from list 
+Consumer <- Louvre: Return individual photo metadata & URL
+
+==Scheduled Cron Job==
+Louvre -> Pexels: Search for minimalism photos
+Louvre <- Pexels: Return first page of minimalism photos
+loop "For each photo..."
+Louvre -> "Cloudflare KV": Add result to Cloudflare KV (overwrite existing one if present)
+Louvre <- "Cloudflare KV": Success
+end
+@enduml
