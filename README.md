@@ -17,6 +17,8 @@ There aren't many moving parts - the architecture looks like this:
 
 GET request to production deployment: https://louvre.matttennison.workers.dev/
 
+[The E2E snapshots](test/e2e/__snapshots__/e2e.test.ts.snap) shows some example responses that are kept up to date (assuming a passing build).
+
 ### Example using httpie
 
 ```bash

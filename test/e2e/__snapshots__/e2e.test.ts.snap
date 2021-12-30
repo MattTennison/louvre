@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when KeyValue is throwing errors: 500 Error Response Body 1`] = `
+Object {
+  "error": "something.not.right",
+}
+`;
+
+exports[`when no entries are in the KeyValue store: 503 Error Response Body 1`] = `
+Object {
+  "error": "no.photos.in.cache",
+}
+`;
+
+exports[`with initalised store: 200 Success Response Body 1`] = `
+Object {
+  "data": Object {
+    "photo": Object {
+      "attribution": Object {
+        "link": Object {
+          "source": "Pexels",
+          "url": "https://www.pexels.com/photo/white-wooden-cabinet-1699655/",
+        },
+        "photographer": Object {
+          "name": "Henry & Co.",
+          "url": "https://www.pexels.com/@hngstrm",
+        },
+      },
+      "avg_color": "#BFC0C5",
+      "src": "https://images.pexels.com/photos/1699655/pexels-photo-1699655.jpeg",
+    },
+  },
+}
+`;

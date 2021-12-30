@@ -36,26 +36,7 @@ test('with initalised store', async () => {
   expect(response.status).toBe(200)
   expect(response.headers.get('Content-Type')).toEqual('application/json')
   expect(response.headers.get('Access-Control-Allow-Origin')).toEqual('*')
-  expect(body).toMatchInlineSnapshot(`
-Object {
-  "data": Object {
-    "photo": Object {
-      "attribution": Object {
-        "link": Object {
-          "source": "Pexels",
-          "url": "https://www.pexels.com/photo/white-wooden-cabinet-1699655/",
-        },
-        "photographer": Object {
-          "name": "Henry & Co.",
-          "url": "https://www.pexels.com/@hngstrm",
-        },
-      },
-      "avg_color": "#BFC0C5",
-      "src": "https://images.pexels.com/photos/1699655/pexels-photo-1699655.jpeg",
-    },
-  },
-}
-`)
+  expect(body).toMatchSnapshot('200 Success Response Body')
 })
 
 test('when KeyValue is throwing errors', async () => {
@@ -68,11 +49,7 @@ test('when KeyValue is throwing errors', async () => {
   const body = await response.json()
 
   expect(response.status).toEqual(500)
-  expect(body).toMatchInlineSnapshot(`
-Object {
-  "error": "something.not.right",
-}
-`)
+  expect(body).toMatchSnapshot('500 Error Response Body')
 })
 
 test('when no entries are in the KeyValue store', async () => {
@@ -83,9 +60,5 @@ test('when no entries are in the KeyValue store', async () => {
   expect(response.headers.get('Retry-After')).toEqual(
     '2021-08-22T00:30:00.000Z',
   )
-  expect(body).toMatchInlineSnapshot(`
-Object {
-  "error": "no.photos.in.cache",
-}
-`)
+  expect(body).toMatchSnapshot('503 Error Response Body')
 })
