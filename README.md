@@ -1,6 +1,6 @@
 # Louvre
 
-This is a Cloudflare worker designed to serve images quickly from the Pexels API using a local cache. The intended use-case was for new tab pages to serve random background images quickly (and let me play about with Cloudflare workers...).
+This is a Cloudflare worker designed to serve images quickly from the [Pexels API](https://www.pexels.com/api/) using a local cache. The intended use-case was for new tab pages to serve random background images quickly (and let me play about with Cloudflare workers...).
 
 ## Architecture
 
