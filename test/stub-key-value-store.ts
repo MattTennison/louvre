@@ -25,6 +25,6 @@ export function stubKeyValueStore(): KeyValueStore {
           .filter((key) => key.startsWith(prefix))
           .map((name) => ({ name })),
       }),
-    get: (key: string) => Promise.resolve(store[key]),
+    get: (key: string) => Promise.resolve(store[key] ?? null),
   }
 }
