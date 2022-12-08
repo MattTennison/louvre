@@ -4,14 +4,14 @@ import config from './config'
 import { PexelsPhotoPayload } from './services/photo'
 import { getList } from './services/cloudflare-kv'
 
-const createResponse = (body: Object, init?: ResponseInit) => {
+const createResponse = (body: Record<string, unknown>, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
   response.headers.set('Access-Control-Allow-Origin', '*')
   response.headers.set('Content-Type', 'application/json')
   return response
 }
 
-export async function handleRequest(request: Request): Promise<Response> {
+export const handleRequest = async (): Promise<Response> => {
   try {
     const list = await getList('minimalism:photo')
     if (list === null || list.keys.length === 0) {

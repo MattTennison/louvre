@@ -7,6 +7,7 @@
     "build": "webpack",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest --config jestconfig.json --verbose"
   },
   "author": "author",
@@ -16,7 +17,10 @@
     "extends": [
       "typescript",
       "prettier"
-    ]
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
