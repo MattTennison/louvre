@@ -30,7 +30,7 @@ afterEach(() => {
 test('with initalised store', async () => {
   await handleScheduled()
 
-  const response = await handleRequest(new Request('/', { method: 'GET' }))
+  const response = await handleRequest()
   const body = await response.json()
 
   expect(response.status).toBe(200)
@@ -45,7 +45,7 @@ test('when KeyValue is throwing errors', async () => {
     .spyOn(photosStore, 'get')
     .mockRejectedValue(new Error('something.not.right'))
 
-  const response = await handleRequest(new Request('/', { method: 'GET' }))
+  const response = await handleRequest()
   const body = await response.json()
 
   expect(response.status).toEqual(500)
@@ -53,7 +53,7 @@ test('when KeyValue is throwing errors', async () => {
 })
 
 test('when no entries are in the KeyValue store', async () => {
-  const response = await handleRequest(new Request('/', { method: 'GET' }))
+  const response = await handleRequest()
   const body = await response.json()
 
   expect(response.status).toEqual(503)
