@@ -2,6 +2,7 @@ import { pickRandom } from './utils/pick-random'
 import cronParser from 'cron-parser'
 import config from './config'
 import { PexelsPhotoPayload } from './services/photo'
+import { getList } from './services/cloudflare-kv'
 
 const createResponse = (body: Object, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
@@ -12,8 +13,8 @@ const createResponse = (body: Object, init?: ResponseInit) => {
 
 export async function handleRequest(request: Request): Promise<Response> {
   try {
-    const { keys } = await PHOTOS.list({ prefix: 'minimalism:photo' })
-    if (keys.length === 0) {
+    const list = await getList('minimalism:photo')
+    if (list === null || list.keys.length === 0) {
       const response = createResponse(
         { error: 'no.photos.in.cache' },
         {
@@ -32,7 +33,7 @@ export async function handleRequest(request: Request): Promise<Response> {
       return response
     }
 
-    const { name } = pickRandom(keys)
+    const { name } = pickRandom(list.keys)
     const result = await PHOTOS.get(name)
 
     if (result === null) {
