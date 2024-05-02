@@ -7,7 +7,7 @@
     "build": "webpack",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "eslint --max-warnings=0 --fix src && prettier --write '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "test": "jest --config jestconfig.json --verbose",
     "deploy": "wrangler deploy src/index.ts"
   },
@@ -15,7 +15,10 @@
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
     "root": true,
-    "extends": ["typescript", "prettier"],
+    "extends": [
+      "typescript",
+      "prettier"
+    ],
     "rules": {
       "@typescript-eslint/explicit-module-boundary-types": "off"
     }
