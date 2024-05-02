@@ -28,5 +28,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - run: npm i @cloudflare/wrangler -g
-      - run: wrangler publish
+      - run: npm run deploy
