@@ -15,7 +15,10 @@
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
     "root": true,
-    "extends": ["typescript", "prettier"],
+    "extends": [
+      "typescript",
+      "prettier"
+    ],
     "rules": {
       "@typescript-eslint/explicit-module-boundary-types": "off"
     }
