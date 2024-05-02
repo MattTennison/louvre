@@ -1,7 +1,8 @@
 import { search } from './services/photo'
+import { Env } from './types'
 
-export async function handleScheduled() {
-  const results = await search('minimalism')
+export async function handleScheduled(env: Env) {
+  const results = await search(env.PEXELS_API_KEY, 'minimalism')
 
   const individualPhotoItems = results.photos.map((photo) => ({
     key: `minimalism:photo:${photo.id}`,
@@ -22,7 +23,7 @@ export async function handleScheduled() {
 
   await Promise.all([
     ...itemsToWrite.map(({ key, value }) =>
-      PHOTOS.put(key, JSON.stringify(value)),
+      env.PHOTOS.put(key, JSON.stringify(value)),
     ),
   ])
 }

@@ -3,9 +3,12 @@ import { KeyValueStore, stubKeyValueStore } from '../stub-key-value-store'
 import { handleScheduled } from '../../src/load-data'
 import { handleRequest } from '../../src/handler'
 import MockDate from 'mockdate'
+import { Env } from '../../src/types'
+import { KVNamespace } from '@cloudflare/workers-types'
+import nock from 'nock'
 
-declare var global: any
 let photosStore: KeyValueStore
+let env: Env
 
 beforeEach(() => {
   photosStore = stubKeyValueStore()
@@ -13,14 +16,20 @@ beforeEach(() => {
 
   MockDate.set('2021-08-21T09:14:47.409Z')
 
-  Object.assign(global, {
-    PHOTOS: photosStore,
-    fetch: () =>
-      Promise.resolve({
-        json: () => Promise.resolve(pexelsSearchPhotosResponse),
-      }),
-  })
-  jest.resetModules()
+  nock('https://api.pexels.com')
+    .get('/v1/search')
+    .query({
+      query: 'minimalism',
+      per_page: 80,
+    })
+    .reply(200, pexelsSearchPhotosResponse)
+
+  nock.disableNetConnect()
+
+  env = {
+    PHOTOS: photosStore as unknown as KVNamespace,
+    PEXELS_API_KEY: 'PEXELS_API_KEY',
+  }
 })
 
 afterEach(() => {
@@ -28,9 +37,9 @@ afterEach(() => {
 })
 
 test('with initalised store', async () => {
-  await handleScheduled()
+  await handleScheduled(env)
 
-  const response = await handleRequest()
+  const response = await handleRequest(env)
   const body = await response.json()
 
   expect(response.status).toBe(200)
@@ -40,12 +49,12 @@ test('with initalised store', async () => {
 })
 
 test('when KeyValue is throwing errors', async () => {
-  await handleScheduled()
+  await handleScheduled(env)
   jest
     .spyOn(photosStore, 'get')
     .mockRejectedValue(new Error('something.not.right'))
 
-  const response = await handleRequest()
+  const response = await handleRequest(env)
   const body = await response.json()
 
   expect(response.status).toEqual(500)
@@ -53,12 +62,12 @@ test('when KeyValue is throwing errors', async () => {
 })
 
 test('when no entries are in the KeyValue store', async () => {
-  const response = await handleRequest()
+  const response = await handleRequest(env)
   const body = await response.json()
 
   expect(response.status).toEqual(503)
   expect(response.headers.get('Retry-After')).toEqual(
-    '2021-08-22T00:30:00.000Z',
+    '2021-08-22T00:40:00.000Z',
   )
   expect(body).toMatchSnapshot('503 Error Response Body')
 })

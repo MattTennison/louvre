@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { KVNamespace } from '@cloudflare/workers-types'
 
 export const listSchema = z.object({
   keys: z.array(
@@ -8,8 +9,8 @@ export const listSchema = z.object({
   ),
 })
 
-export const getList = async (prefix: string) => {
-  const item = await PHOTOS.get(`${prefix}:list`)
+export const getList = async (namespace: KVNamespace, prefix: string) => {
+  const item = await namespace.get(`${prefix}:list`)
   if (item === null) {
     return null
   }

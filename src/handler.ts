@@ -1,8 +1,8 @@
 import { pickRandom } from './utils/pick-random'
 import cronParser from 'cron-parser'
-import config from './config'
 import { PexelsPhotoPayload } from './services/photo'
 import { getList } from './services/cloudflare-kv'
+import { Env } from './types'
 
 const createResponse = (body: Record<string, unknown>, init?: ResponseInit) => {
   const response = new Response(JSON.stringify(body), init)
@@ -11,9 +11,9 @@ const createResponse = (body: Record<string, unknown>, init?: ResponseInit) => {
   return response
 }
 
-export const handleRequest = async (): Promise<Response> => {
+export const handleRequest = async (env: Env): Promise<Response> => {
   try {
-    const list = await getList('minimalism:photo')
+    const list = await getList(env.PHOTOS, 'minimalism:photo')
     if (list === null || list.keys.length === 0) {
       const response = createResponse(
         { error: 'no.photos.in.cache' },
@@ -25,7 +25,7 @@ export const handleRequest = async (): Promise<Response> => {
       response.headers.set(
         'Retry-After',
         cronParser
-          .parseExpression(config.schedule.cron, { tz: 'UTC' })
+          .parseExpression('40 0 * * *', { tz: 'UTC' })
           .next()
           .toISOString(),
       )
@@ -34,7 +34,7 @@ export const handleRequest = async (): Promise<Response> => {
     }
 
     const { name } = pickRandom(list.keys)
-    const result = await PHOTOS.get(name)
+    const result = await env.PHOTOS.get(name)
 
     if (result === null) {
       return createResponse(
@@ -67,8 +67,10 @@ export const handleRequest = async (): Promise<Response> => {
       },
     })
   } catch (e) {
+    const error = e instanceof Error ? e.message : 'unknown.error'
+
     return createResponse(
-      { error: e.message },
+      { error },
       {
         status: 500,
       },

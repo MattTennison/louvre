@@ -22,13 +22,7 @@ const PhotosResponse = z.object({
   next_page: z.string(),
 })
 
-export const search = async (searchTerm: string) => {
-  const apiKey = config.pexels.authentication
-
-  if (apiKey === undefined) {
-    throw new Error('undefined.api.key')
-  }
-
+export const search = async (apiKey: string, searchTerm: string) => {
   const url = new URL('https://api.pexels.com/v1/search')
   url.searchParams.set('query', searchTerm)
   url.searchParams.set('per_page', '80')

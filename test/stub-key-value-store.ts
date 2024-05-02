@@ -9,11 +9,11 @@ export interface KeyValueStore {
   }: {
     prefix: string
   }) => Promise<{ keys: { name: string }[] }>
-  get: (key: string) => Promise<String>
+  get: (key: string) => Promise<string>
 }
 
 export function stubKeyValueStore(): KeyValueStore {
-  const store: Dictionary<String> = {}
+  const store: Dictionary<string> = {}
 
   return {
     put: (key: string, value: string) => {
