@@ -15,10 +15,7 @@
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
     "root": true,
-    "extends": [
-      "typescript",
-      "prettier"
-    ],
+    "extends": ["typescript", "prettier"],
     "rules": {
       "@typescript-eslint/explicit-module-boundary-types": "off"
     }
@@ -27,7 +24,6 @@
     "@cloudflare/workers-types": "^4.20240423.0",
     "@types/jest": "^26.0.23",
     "@types/node": "^20.0.0",
-    "@types/service-worker-mock": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.0.0",
@@ -38,9 +34,7 @@
     "mockdate": "^3.0.5",
     "nock": "^14.0.0-beta.6",
     "prettier": "^3.0.0",
-    "service-worker-mock": "^2.0.5",
     "ts-jest": "^29.1.2",
-    "ts-loader": "^9.2.2",
     "typescript": "^5.4.5",
     "wrangler": "^3.53.1"
   },
