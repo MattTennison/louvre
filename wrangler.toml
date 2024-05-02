@@ -1,11 +1,7 @@
 name = "louvre"
 account_id = "3bc1ba05af520b1b02c6222025200b06"
-route = ""
 workers_dev = true
 compatibility_date = "2021-12-30"
-
-[build]
-command = "npm install && npm run build"
 
 [[kv_namespaces]]
 binding = "PHOTOS"
