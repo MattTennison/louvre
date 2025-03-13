@@ -39,7 +39,7 @@
     "prettier": "^3.0.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.5",
-    "wrangler": "^3.53.1"
+    "wrangler": "^4.0.0"
   },
   "dependencies": {
     "cron-parser": "^4.0.0",
